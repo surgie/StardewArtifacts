@@ -1,18 +1,29 @@
 <!doctype html>
 
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
+    <meta charset="utf-8">
 
-  <title>Stardew 1.4 Artifact Predictor</title>
-  <meta name="description" content="Stardew 1.4 Artifact Predictor">
-  <meta name="author" content="surgie">
+    <title>Stardew 1.4 Artifact Predictor</title>
+    <meta name="description" content="Stardew 1.4 Artifact Predictor">
+    <meta name="author" content="surgie">
 
-  <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css">
 
 </head>
 
 <body>
-  <script src="scripts.js"></script>
+    <p>
+        Select a save file to check:
+        <input type="file" id="savefile" name="savefile">
+    </p>
+    
+    <div id="predictions"></div>
+
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="scripts.js?v=1.4.5"></script>
 </body>
+
 </html>
