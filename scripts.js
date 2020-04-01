@@ -1,31 +1,77 @@
+class FarmObject {
+    constructor(object) {
+        this.location = location;
+        this.xPos = object.key.Vector2.X;
+        this.yPos = object.key.Vector2.Y;
+
+        this.name = object.value.Object.name;
+        this.category = object.value.Object.category;
+        this.type = object.value.Object.type;
+        this.parentSheetIndex = object.value.Object.parentSheetIndex;
+    }
+
+    get isArtifactSpot() {
+        return this.name === 'Artifact Spot';
+    }
+
+    print() {
+        console.log(`    ${this.name} ${this.xPos} ${this.yPos}`);
+    }
+}
+
+class GameLocation {
+    constructor(location) {
+        this.name = location.name;
+
+        let objects = Array.isArray(location.objects.item) ? location.objects.item : [location.objects.item];
+        this.objects = objects.map(x => new FarmObject(x));
+    }    
+
+    get artifactSpots() {
+        return this.objects.filter(x => x.isArtifactSpot);
+    }
+
+    get hasArtifactSpots() {
+        return this.artifactSpots.length > 0;
+    }
+
+    print() {
+        console.log(`-- ${this.name} --`);
+    }
+}
+
+class Predictor {
+    constructor(save) {
+        this.uniqueId = save.uniqueIDForThisGame;
+        this.booksFound = save.lostBooksFound;
+        this.daysPlayed = save.player.stats.DaysPlayed;
+        this.currentSeason = save.currentSeason;
+
+        this.locations = save.locations.GameLocation.filter(x => !!x.objects).map(x => new GameLocation(x));
+    }
+
+    get locationsWithArtifacts() {
+        return this.locations.filter(location => location.hasArtifactSpots);
+    }
+
+    dig(locationName, xPos, yPos) {
+
+    }
+
+    print() {
+        this.locationsWithArtifacts.forEach(location => {
+            location.print();
+            location.artifactSpots.forEach(artifactSpot => artifactSpot.print());
+        });
+    }
+}
+
 function runPrediction(save) {
-    let query = (name) => $(save).children('SaveGame').children(name)[0].text();
-    let queryAsNumber = (name) => parseInt(query(name), 10);
-
-    // TODO bah this is bad, redo it again?
-    // changge to fastXmlParser? https://www.npmjs.com/package/fast-xml-parser
-    // https://cdnjs.com/libraries/fast-xml-parser
-    // can then drop jquery?
-
-    // https://github.com/NaturalIntelligence/fast-xml-parser#readme (XML to JSON)
-    // var result = parser.validate(xmlData);
-    // if (result !== true) console.log(result.err);
-    // var jsonObj = parser.parse(xmlData);
-
-    const uniqueId = queryAsNumber('uniqueIDForThisGame');
-    const lostbooksFound = queryAsNumber('lostBooksFound');
-    const daysPlayed = queryAsNumber('daysPlayed');
-    const currentSeason = query('currentSeason');
+    const predictor = new Predictor(save);
+    predictor.print();
 
     const predictions = document.getElementById('predictions');
-    predictions.innerHTML = `
-        <ul>
-            <li>Unique Id ${uniqueId}</li>
-            <li>Lost Books Found: ${lostbooksFound}</li>
-            <li>Days Played: ${daysPlayed}</li>
-            <li>Current Season: ${currentSeason}</li>
-        </ul>
-    `;
+    predictions.innerHTML = `put predictions here`;
 }
 
 function readSaveFile(event) {
@@ -34,8 +80,10 @@ function readSaveFile(event) {
 
     reader.onload = function (e) {
         if (typeof e.target.result === 'string') {
-            const xmlDoc = $.parseXML(e.target.result);
-            runPrediction(xmlDoc);            
+            var result = parser.validate(e.target.result);
+            if (result !== true) console.log(result.err);
+            var jsonObj = parser.parse(e.target.result);
+            runPrediction(jsonObj.SaveGame);            
         }
     }
 
