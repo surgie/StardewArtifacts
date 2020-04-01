@@ -20,8 +20,8 @@ const rawLocationData = {
     "Temp": "16 .9 22 .9/396 .6/404 .9 410 .9/418 .5 414 .2/153 -1 145 -1 143 -1 137 -1 132 -1 706 -1 702 -1/153 -1 145 -1 143 -1 137 -1 132 -1 706 -1 702 -1/153 -1 145 -1 143 -1 137 -1 132 -1 706 -1 702 -1/153 -1 145 -1 143 -1 137 -1 132 -1 706 -1 702 -1/378 .08 390 .25 330 1"
 };
 
-export function secondHalfOfDigging(name, random, lostBooksFound) {
-    var prediction = new PredictionResult(-1, 1);
+export function secondHalfOfDigging(name, random, lostBooksFound, xPos, yPos) {
+    var prediction = new PredictionResult(-1, 1, xPos, yPos);
 
     if (!rawLocationData.hasOwnProperty(name)) {
         return prediction;
@@ -46,7 +46,7 @@ export function secondHalfOfDigging(name, random, lostBooksFound) {
                     index2 = 770;
                 }
 
-                return new PredictionResult(index2, 1);
+                return new PredictionResult(index2, 1, xPos, yPos);
             }
 
             // if index2 === 330 { }

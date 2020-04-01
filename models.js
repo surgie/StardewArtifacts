@@ -2,13 +2,19 @@ export { FarmObject, GameLocation, PredictionResult }
 import { objectInformation } from './data/objectInformation.js';
 
 class PredictionResult {
-    constructor(objectId, quantity) {
+    constructor(objectId, quantity, xPos, yPos) {
         this.objectId = objectId;
         this.quantity = quantity;
+        this.xPos = xPos;
+        this.yPos = yPos;
     }
 
     get object() {
         return objectInformation.find(x => x.ObjectId === this.objectId);
+    }
+
+    get name() {
+        return this.object.DisplayName;
     }
 }
 
@@ -47,9 +53,5 @@ class GameLocation {
 
     get hasArtifactSpots() {
         return this.artifactSpots.length > 0;
-    }
-
-    print() {
-        console.log(`-- ${this.name} --`);
     }
 }

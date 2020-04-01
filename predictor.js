@@ -18,7 +18,7 @@ export class Predictor {
     }
 
     dig(locationName, xPos, yPos) {
-        var objectIndex = new PredictionResult(-1, 1);
+        var objectIndex = new PredictionResult(-1, 1, xPos, yPos);
 
         var rand = new CSRandom(xPos * 2000 + yPos + this.uniqueId / 2 + this.daysPlayed);
 
@@ -47,18 +47,18 @@ export class Predictor {
             return objectIndex;
         } else if (this.currentSeason === 'winter' && rand.NextDouble() < 0.5 && locationName !== 'Desert') {
             if (rand.NextDouble() < 0.4) {
-                return new PredictionResult(416, 1);
+                return new PredictionResult(416, 1, xPos, yPos);
             } else {
-                return new PredictionResult(412, 1);
+                return new PredictionResult(412, 1, xPos, yPos);
             }
         } else {
             if (this.currentSeason === 'spring' && rand.NextDouble() < 1.0 / 16.0) {
                 if (locationName !== 'Desert' && locationName !== 'Beach') {
-                    return new PredictionResult(273, rand.Next(2, 6));
+                    return new PredictionResult(273, rand.Next(2, 6), xPos, yPos);
                 }
             }
 
-            objectIndex = secondHalfOfDigging(locationName, rand, this.booksFound);
+            objectIndex = secondHalfOfDigging(locationName, rand, this.booksFound, xPos, yPos);
 
             if (objectIndex.objectId === -1) {
                 objectIndex.objectId = 330;
@@ -66,6 +66,21 @@ export class Predictor {
 
             return objectIndex;
         }
+    }
+
+    getPredictions() {
+        var predictions = {};
+
+        this.locationsWithArtifacts.forEach(location => {
+            predictions[location.name] = [];
+
+            location.artifactSpots.forEach(as => {
+                const prediction = this.dig(location.name, as.xPos, as.yPos);
+                predictions[location.name].push(prediction);
+            });
+        });
+
+        return predictions;
     }
 
     print() {

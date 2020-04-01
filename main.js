@@ -4,10 +4,24 @@ const parser = window.parser;
 
 function runPrediction(save) {
     const predictor = new Predictor(save);
-    predictor.print();
+    const predictions = predictor.getPredictions();
+    console.log(predictions);
 
-    const predictions = document.getElementById('predictions');
-    predictions.innerHTML = `put predictions here`;
+    const displayEl = document.getElementById('predictions');
+
+    let items = '';
+    Object.keys(predictions).forEach(key => {
+        items += `<li>${key}<ul>`
+        
+        predictions[key].forEach(prediction => {
+            items += `<li>${prediction.name} (${prediction.quantity}) @ (${prediction.xPos}, ${prediction.yPos})`;
+        })
+
+        items += `</ul></li>`;
+    });
+
+    displayEl.innerHTML = '<ul>' + items + '</ul>';
+    
 }
 
 function readSaveFile(event) {
