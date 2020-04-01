@@ -7,6 +7,8 @@
 
 /*jshint browser: true, jquery: true */
 
+export { CSRandom };
+
 // These would be constants in ES2015
 var INT_MIN = -2147483648,
 	INT_MAX = 2147483647,
