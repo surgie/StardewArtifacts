@@ -1,4 +1,5 @@
 import { objectInformation } from './objectInformation.js';
+import { PredictionResult } from '../models.js';
 
 const rawLocationData = {
     "Farm": "-1/-1/-1/-1/-1/-1/-1/-1/382 .05 770 .1 390 .25 330 1",
@@ -20,14 +21,16 @@ const rawLocationData = {
 };
 
 export function secondHalfOfDigging(name, random, lostBooksFound) {
+    var prediction = new PredictionResult(-1, 1);
+
     if (!rawLocationData.hasOwnProperty(name)) {
-        return -1;
+        return prediction;
     }
 
     const strArray = rawLocationData[name].split('/')[8].split(' ');
 
     if (strArray.length === 0  || strArray[0] === '-1') {
-        return -1;
+        return prediction;
     }
 
     for (var index1 = 0; index1 < strArray.length; index1 += 2)
@@ -42,12 +45,18 @@ export function secondHalfOfDigging(name, random, lostBooksFound) {
                 if (index2 === 102 && lostBooksFound >= 21) {
                     index2 = 770;
                 }
-                return index2;
+
+                return new PredictionResult(index2, 1);
             }
+
+            // if index2 === 330 { }
+
+            prediction.objectId = index2;
+            prediction.quantity = random.Next(1, 4);
         }
     }
 
-    return -1;
+    return prediction;
 }
 
 

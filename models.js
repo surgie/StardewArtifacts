@@ -1,4 +1,16 @@
-export { FarmObject, GameLocation }
+export { FarmObject, GameLocation, PredictionResult }
+import { objectInformation } from './data/objectInformation.js';
+
+class PredictionResult {
+    constructor(objectId, quantity) {
+        this.objectId = objectId;
+        this.quantity = quantity;
+    }
+
+    get object() {
+        return objectInformation.find(x => x.ObjectId === this.objectId);
+    }
+}
 
 class FarmObject {
     constructor(object) {

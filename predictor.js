@@ -1,5 +1,5 @@
 import { CSRandom } from './cs-random.js';
-import { GameLocation } from './models.js';
+import { GameLocation, PredictionResult } from './models.js';
 import { objectInformation } from './data/objectInformation.js';
 import { secondHalfOfDigging } from './data/locations.js';
 
@@ -18,7 +18,7 @@ export class Predictor {
     }
 
     dig(locationName, xPos, yPos) {
-        var objectIndex = -1;
+        var objectIndex = new PredictionResult(-1, 1);
 
         var rand = new CSRandom(xPos * 2000 + yPos + this.uniqueId / 2 + this.daysPlayed);
 
@@ -30,39 +30,38 @@ export class Predictor {
             }
 
             if (rand.NextDouble() < odds) {
-                objectIndex = objectInformation[i].ObjectId;
+                objectIndex.objectId = objectInformation[i].ObjectId;
                 break;
             }
         }
 
         if (rand.NextDouble() < 0.2 && locationName !== 'Farm') {
-            objectIndex = 102;
+            objectIndex.objectId = 102;
         }
 
-        if (objectIndex === 102 && this.booksFound >= 21) {
-            objectIndex = 770;
+        if (objectIndex.objectId === 102 && this.booksFound >= 21) {
+            objectIndex.objectId = 770;
         }
 
-        if (objectIndex !== -1) {
+        if (objectIndex.objectId !== -1) {
             return objectIndex;
         } else if (this.currentSeason === 'winter' && rand.NextDouble() < 0.5 && locationName !== 'Desert') {
             if (rand.NextDouble() < 0.4) {
-                return 416;
+                return new PredictionResult(416, 1);
             } else {
-                return 412;
+                return new PredictionResult(412, 1);
             }
         } else {
             if (this.currentSeason === 'spring' && rand.NextDouble() < 1.0 / 16.0) {
                 if (locationName !== 'Desert' && locationName !== 'Beach') {
-                    // To determine amount of rice: random.Next(2, 6)
-                    return 273;
+                    return new PredictionResult(273, rand.Next(2, 6));
                 }
             }
 
             objectIndex = secondHalfOfDigging(locationName, rand, this.booksFound);
 
-            if (objectIndex === -1) {
-                objectIndex = 330;
+            if (objectIndex.objectId === -1) {
+                objectIndex.objectId = 330;
             }
 
             return objectIndex;
@@ -72,9 +71,8 @@ export class Predictor {
     print() {
         this.locationsWithArtifacts.forEach(location => {
             location.artifactSpots.forEach(as => {
-                const objectIndex = this.dig(location.name, as.xPos, as.yPos);
-                const object = objectInformation.find(x => x.ObjectId === objectIndex);
-                console.log(`    digging at ${location.name} ${as.xPos} ${as.yPos} - expecting ${object.DisplayName}`);
+                const prediction = this.dig(location.name, as.xPos, as.yPos);
+                console.log(`    digging at ${location.name} ${as.xPos} ${as.yPos} - expecting ${prediction.object.DisplayName} (${prediction.quantity})`);
             })
         });
     }
