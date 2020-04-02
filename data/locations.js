@@ -41,13 +41,19 @@ export function secondHalfOfDigging(name, random, lostBooksFound, xPos, yPos) {
             var index2 = parseInt(strArray[index1], 10);
             var object = objectInformation.find(x => x.ObjectId === index2);
 
-            if (object.Type === 'Arch' || index2 === 102) {
-                if (index2 === 102 && lostBooksFound >= 21) {
-                    index2 = 770;
+            try {
+                if (object.Type === 'Arch' || index2 === 102) {
+                    if (index2 === 102 && lostBooksFound >= 21) {
+                        index2 = 770;
+                    }
+    
+                    return new PredictionResult(index2, 1, xPos, yPos);
                 }
-
-                return new PredictionResult(index2, 1, xPos, yPos);
+            } catch (error) {
+                console.log(error);
+                console.log(index2);   
             }
+
 
             // if index2 === 330 { }
 
