@@ -15,11 +15,15 @@ function runPrediction(save) {
         items += `<li>${key}<ul>`
         
         predictions[key].forEach(prediction => {
+            let output = prediction.quantity > 1 ?
+                `${prediction.name} (${prediction.quantity}) @ (${prediction.xPos}, ${prediction.yPos})` :
+                `${prediction.name} @ (${prediction.xPos}, ${prediction.yPos})`;            
+
             if (prediction.isArtifact && !archFound.some(x => x === prediction.objectId)) {
-                items += `<li><b>${prediction.name} (${prediction.quantity}) @ (${prediction.xPos}, ${prediction.yPos})</b></li>`;
-            } else {
-                items += `<li>${prediction.name} (${prediction.quantity}) @ (${prediction.xPos}, ${prediction.yPos})</li>`;
-            }
+                output = `<b>${output}</b>`;
+            } 
+                
+            items += `<li>${output}</li>`;
         })
 
         items += `</ul></li>`;
