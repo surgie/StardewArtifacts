@@ -432,6 +432,16 @@ var objectInformation = [
       "OddsPerLocation": {}
     },
     {
+      "ObjectId": 390,
+      "Name": "Stone",
+      "Price": 2,
+      "Edibility": -300,
+      "Type": "Basic -16",
+      "DisplayName": "Stone",
+      "Description": "A common material with many uses in crafting and building.",
+      "OddsPerLocation": {}
+    },
+    {
       "ObjectId": 579,
       "Name": "Prehistoric Scapula",
       "Price": 100,

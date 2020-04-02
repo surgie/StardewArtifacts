@@ -16,6 +16,10 @@ class PredictionResult {
     get name() {
         return this.object.DisplayName;
     }
+
+    get isArtifact() { 
+        return this.object.Type === "Arch";
+    }
 }
 
 class FarmObject {
