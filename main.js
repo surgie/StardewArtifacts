@@ -30,7 +30,10 @@ function runPrediction(save) {
     });
 
     displayEl.innerHTML = '<ul>' + items + '</ul>';
-    
+
+    // Display Current Day
+    const dateEl = document.getElementById('date');
+    dateEl.innerText = `${save.currentSeason} ${save.dayOfMonth}, Year ${save.year}`   
 }
 
 function readSaveFile(event) {
