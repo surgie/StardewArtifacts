@@ -587,6 +587,16 @@ var objectInformation = [
       "DisplayName": "Mixed Seeds",
       "Description": "There's a little bit of everything here. Plant them and see what grows!",
       "OddsPerLocation": {}
+    },
+    {
+        "ObjectId": 273,
+        "Name": "Rice Shoot",
+        "Price": 20,
+        "Edibility": -300,
+        "Type": "Seeds -74",
+        "DisplayName": "Rice Shoot",
+        "Description": "Plant these in the spring. Takes 8 days to mature. Grows faster if planted near a body of water. Harvest with the scythe.",
+        "OddsPerLocation": {}
     }
   ];
   
